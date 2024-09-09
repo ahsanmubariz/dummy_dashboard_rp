@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
-import { Input } from "../components/ui/input";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import { Input } from "./ui/input";
 import { Label } from "../components/ui/label";
-import { Button } from "../components/ui/button";
-import { Badge } from "../components/ui/badge";
-import { Checkbox } from "../components/ui/checkbox";
+import { Button } from "./ui/button";
+import { Badge } from "./ui/badge";
+import { Checkbox } from "./ui/checkbox";
 import { AlertCircle, Upload, ChevronDown, ChevronUp, Copy } from 'lucide-react';
 
 const ConfigTab = () => {
