@@ -1,8 +1,8 @@
 import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
-import { Input } from "./ui/input";
-import { Button } from "./ui/button";
-import { Badge } from "./ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/Card";
+import { Input } from "./ui/Input";
+import { Button } from "./ui/Button";
+import { Badge } from "./ui/Badge";
 import { Search, Phone, Mail, FileText, ExternalLink } from 'lucide-react';
 
 const SupportTab = () => (
@@ -123,7 +123,7 @@ const SupportTab = () => (
             </CardHeader>
             <CardContent>
                 <div className="flex items-center justify-between">
-                    <span>dummy digital id Authentication</span>
+                    <span>Dummy Digital ID</span>
                     <Badge variant="outline" className="bg-green-100">Operasional</Badge>
                 </div>
                 <div className="text-sm text-muted-foreground mt-2">

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
-import { Input } from "./ui/input";
-import { Button } from "./ui/button";
-import { Badge } from "./ui/badge";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/Card";
+import { Input } from "./ui/Input";
+import { Button } from "./ui/Button";
+import { Badge } from "./ui/Badge";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { Search, Download, Calendar } from 'lucide-react';
 
 // Dummy data generator function
@@ -13,8 +13,10 @@ const generateData = (startDate, endDate) => {
     while (currentDate <= new Date(endDate)) {
         data.push({
             date: currentDate.toISOString().split('T')[0],
-            autentikasi: Math.floor(Math.random() * 5000) + 1000,
-            waktuRespon: Math.floor(Math.random() * 100) + 150
+            identify: Math.floor(Math.random() * 5000) + 1000,
+            share: Math.floor(Math.random() * 3000) + 1000,
+            easy_verify: Math.floor(Math.random() * 2314) + 1000,
+            secure_verify: Math.floor(Math.random() * 1332) + 1000,
         });
         currentDate.setDate(currentDate.getDate() + 1);
     }
@@ -64,16 +66,18 @@ const LogStatsTab = () => {
                         </div>
                     </div>
                     <ResponsiveContainer width="100%" height={400}>
-                        <LineChart data={data}>
+                        <BarChart data={data}>
                             <CartesianGrid strokeDasharray="3 3" />
                             <XAxis dataKey="date" />
                             <YAxis yAxisId="left" />
                             <YAxis yAxisId="right" orientation="right" />
                             <Tooltip />
                             <Legend />
-                            <Line yAxisId="left" type="monotone" dataKey="autentikasi" stroke="#8884d8" name="Autentikasi" />
-                            <Line yAxisId="right" type="monotone" dataKey="waktuRespon" stroke="#82ca9d" name="Waktu Respon (ms)" />
-                        </LineChart>
+                            <Bar dataKey="identify" fill="#8884d8" name="Identify" yAxisId="left" />
+                            <Bar dataKey="share" fill="#82ca9d" name="Share" yAxisId="left" />
+                            <Bar dataKey="easy_verify" fill="#ffc658" name="Easy Verify" yAxisId="right" />
+                            <Bar dataKey="secure_verify" fill="#ff8042" name="Secure Verify" yAxisId="right" />
+                        </BarChart>
                     </ResponsiveContainer>
                 </CardContent>
             </Card>
@@ -81,30 +85,37 @@ const LogStatsTab = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <Card className="bg-white shadow-lg">
                     <CardHeader>
-                        <CardTitle className="text-lg font-semibold text-gray-700">Total Autentikasi</CardTitle>
+                        <CardTitle className="text-lg font-semibold text-gray-700">Total Identify</CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold text-gray-900">{data.reduce((sum, day) => sum + day.autentikasi, 0).toLocaleString()}</div>
+                        <div className="text-2xl font-bold text-gray-900">{data.reduce((sum, day) => sum + day.identify, 0).toLocaleString()}</div>
                         <p className="text-sm text-gray-500">Periode yang dipilih</p>
                     </CardContent>
                 </Card>
                 <Card className="bg-white shadow-lg">
                     <CardHeader>
-                        <CardTitle className="text-lg font-semibold text-gray-700">Rata-rata Waktu Respon</CardTitle>
+                        <CardTitle className="text-lg font-semibold text-gray-700">Total Share</CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold text-gray-900">
-                            {Math.round(data.reduce((sum, day) => sum + day.waktuRespon, 0) / data.length)} ms
-                        </div>
+                        <div className="text-2xl font-bold text-gray-900">{data.reduce((sum, day) => sum + day.share, 0).toLocaleString()}</div>
                         <p className="text-sm text-gray-500">Periode yang dipilih</p>
                     </CardContent>
                 </Card>
                 <Card className="bg-white shadow-lg">
                     <CardHeader>
-                        <CardTitle className="text-lg font-semibold text-gray-700">Tingkat Keberhasilan</CardTitle>
+                        <CardTitle className="text-lg font-semibold text-gray-700">Total Easy Verify</CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold text-gray-900">99.8%</div>
+                        <div className="text-2xl font-bold text-gray-900">{data.reduce((sum, day) => sum + day.easy_verify, 0).toLocaleString()}</div>
+                        <p className="text-sm text-gray-500">Periode yang dipilih</p>
+                    </CardContent>
+                </Card>
+                <Card className="bg-white shadow-lg">
+                    <CardHeader>
+                        <CardTitle className="text-lg font-semibold text-gray-700">Total Secure Verify</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="text-2xl font-bold text-gray-900">{data.reduce((sum, day) => sum + day.secure_verify, 0).toLocaleString()}</div>
                         <p className="text-sm text-gray-500">Periode yang dipilih</p>
                     </CardContent>
                 </Card>
@@ -117,7 +128,7 @@ const LogStatsTab = () => {
                 <CardContent>
                     <div className="flex flex-wrap gap-4 mb-4">
                         <div className="flex-grow">
-                            <Input placeholder="Cari log..." />
+                            <Input placeholder="Cari log..." className='p-2'/>
                         </div>
                         <Button className="bg-blue-500 hover:bg-blue-600 text-white">
                             <Search className="h-4 w-4 mr-2" />
@@ -133,22 +144,27 @@ const LogStatsTab = () => {
                             <thead className="bg-gray-50">
                                 <tr>
                                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Timestamp</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">dummy digital id ID</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Personal ID</th>
                                 </tr>
                             </thead>
                             <tbody className="bg-white divide-y divide-gray-200">
-                                {data.slice(0, 5).map((entry, index) => (
-                                    <tr key={index}>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{entry.date} 12:00:00</td>
-                                        <td className="px-6 py-4 whitespace-nowrap">
-                                            <Badge variant={index % 5 === 0 ? "destructive" : "default"} className={index % 5 === 0 ? "bg-red-100 text-red-800" : "bg-green-100 text-green-800"}>
-                                                {index % 5 === 0 ? 'Gagal' : 'Berhasil'}
-                                            </Badge>
-                                        </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">AZC6V{String.fromCharCode(65 + (index % 3))}SADASD</td>
-                                    </tr>
-                                ))}
+                                {data.slice(0, 5).map((entry, index) => {
+                                    // Daftar tipe log yang tersedia
+                                    const types = ['identify', 'share', 'easy_verify', 'secure_verify'];
+                                    // Pilih tipe log secara acak
+                                    const randomType = types[Math.floor(Math.random() * types.length)];
+                                    // Ambil nilai yang sesuai dengan tipe log yang dipilih
+
+                                    return (
+                                        <tr key={index}>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{entry.date} 12:00:00</td>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 capitalize">{randomType.replace(/_/g, ' ')}</td>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">AZC6V{String.fromCharCode(65 + (index % 3))}SADASD</td>
+                                        </tr>
+                                    );
+                                })}
                             </tbody>
                         </table>
                     </div>

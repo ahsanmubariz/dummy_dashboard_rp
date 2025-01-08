@@ -1,22 +1,22 @@
 import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
-import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
-import { Badge } from "./ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/Card"
+import { Alert, AlertDescription, AlertTitle } from "./ui/Alert";
+import { Badge } from "./ui/Badge";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { Activity, AlertTriangle, CheckCircle } from 'lucide-react';
+import { Activity, AlertTriangle, CheckCircle, DollarSign } from 'lucide-react';
 
 import ConfigTab from './ConfigTab';
 import LogStatsTab from './LogStatsTab';
 import SupportTab from './SupportTab';
 
 const data = [
-    { name: 'Sen', autentikasi: 4000 },
-    { name: 'Sel', autentikasi: 3000 },
-    { name: 'Rab', autentikasi: 2000 },
-    { name: 'Kam', autentikasi: 2780 },
-    { name: 'Jum', autentikasi: 1890 },
-    { name: 'Sab', autentikasi: 2390 },
-    { name: 'Min', autentikasi: 3490 },
+    { name: 'Sen', identify: 4000, easy_verify: 129, secure_verify:800, share:1020  },
+    { name: 'Sel', identify: 2399, easy_verify: 80, secure_verify:420, share:600 },
+    { name: 'Rab', identify: 1876, easy_verify: 78, secure_verify:400, share:579},
+    { name: 'Kam', identify: 3989, easy_verify: 112, secure_verify:778, share:1000 },
+    { name: 'Jum', identify: 2039, easy_verify: 100, secure_verify:410, share:540 },
+    { name: 'Sab', identify: 1902, easy_verify: 40, secure_verify:210, share:510 },
+    { name: 'Min', identify: 1034, easy_verify: 21, secure_verify:192, share:230 },
 ];
 
 const Dashboard = () => {
@@ -60,7 +60,7 @@ const Dashboard = () => {
                                     </Card>
                                     <Card className="bg-white shadow-lg">
                                         <CardHeader className="flex flex-row items-center justify-between pb-2">
-                                            <CardTitle className="text-lg font-semibold text-gray-700">Total Autentikasi Hari Ini</CardTitle>
+                                            <CardTitle className="text-lg font-semibold text-gray-700">Total Akses Hari Ini</CardTitle>
                                             <Activity className="h-6 w-6 text-blue-500" />
                                         </CardHeader>
                                         <CardContent>
@@ -69,11 +69,11 @@ const Dashboard = () => {
                                     </Card>
                                     <Card className="bg-white shadow-lg">
                                         <CardHeader className="flex flex-row items-center justify-between pb-2">
-                                            <CardTitle className="text-lg font-semibold text-gray-700">Tingkat Keberhasilan</CardTitle>
-                                            <Badge variant="outline" className="bg-green-100 text-green-800 border-green-300">99.8%</Badge>
+                                            <CardTitle className="text-lg font-semibold text-gray-700">Total Tagihan Bulan Ini</CardTitle>
+                                            <DollarSign className="h-6 w-6 text-green-500" />
                                         </CardHeader>
                                         <CardContent>
-                                            <div className="text-2xl font-bold text-gray-900">Sangat Baik</div>
+                                            <div className="text-2xl text-gray-900">Rp. 100.000.000,-</div>
                                         </CardContent>
                                     </Card>
                                 </div>
@@ -98,7 +98,11 @@ const Dashboard = () => {
                                                 <YAxis />
                                                 <Tooltip />
                                                 <Legend />
-                                                <Bar dataKey="autentikasi" fill="#4F46E5" />
+                                                <Bar name="Identify" dataKey="identify" fill="#4F46E5" />
+                                                <Bar name="Easy Verify" dataKey="easy_verify" fill="#b250eb" />
+                                                <Bar name="Secure Verify" dataKey="secure_verify" fill="#2d0a40" />
+                                                <Bar name="Share" dataKey="share" fill="#d9b63d" />
+
                                             </BarChart>
                                         </ResponsiveContainer>
                                     </CardContent>
