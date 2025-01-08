@@ -22,9 +22,9 @@ const SupportTab = () => (
                 <div className="space-y-2">
                     <h3 className="font-semibold">Pertanyaan Umum:</h3>
                     <ul className="list-disc list-inside space-y-1">
-                        <li>Bagaimana cara memperbarui akses dummy digital id?</li>
+                        <li>Bagaimana cara memperbarui akses?</li>
                         <li>Apa yang harus dilakukan jika integrasi gagal?</li>
-                        <li>Bagaimana cara mengajukan perubahan scope?</li>
+                        <li>Bagaimana cara merubah scope?</li>
                         <li>Berapa lama proses persetujuan untuk RP baru?</li>
                     </ul>
                 </div>
