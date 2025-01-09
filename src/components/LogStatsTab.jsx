@@ -2,34 +2,34 @@ import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/Card";
 import { Input } from "./ui/Input";
 import { Button } from "./ui/Button";
-import { Badge } from "./ui/Badge";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { Search, Download, Calendar } from 'lucide-react';
+import { Search, Download, Calendar, DownloadIcon } from 'lucide-react';
 
 // Dummy data generator function
-const generateData = (startDate, endDate) => {
+const generateData = (selectedMonth) => {
     let data = [];
-    let currentDate = new Date(startDate);
-    while (currentDate <= new Date(endDate)) {
+    let startDate = new Date(selectedMonth);
+    let endDate = new Date(startDate.getFullYear(), startDate.getMonth() + 1, 0);
+
+    while (startDate <= endDate) {
         data.push({
-            date: currentDate.toISOString().split('T')[0],
+            date: startDate.toISOString().split('T')[0],
             identify: Math.floor(Math.random() * 5000) + 1000,
             share: Math.floor(Math.random() * 3000) + 1000,
             easy_verify: Math.floor(Math.random() * 2314) + 1000,
             secure_verify: Math.floor(Math.random() * 1332) + 1000,
         });
-        currentDate.setDate(currentDate.getDate() + 1);
+        startDate.setDate(startDate.getDate() + 1);
     }
     return data;
 };
 
 const LogStatsTab = () => {
-    const [startDate, setStartDate] = useState('2023-09-01');
-    const [endDate, setEndDate] = useState('2023-09-07');
-    const [data, setData] = useState(() => generateData(startDate, endDate));
+    const [selectedMonth, setSelectedMonth] = useState('2023-09');
+    const [data, setData] = useState(() => generateData(selectedMonth));
 
-    const handleDateChange = () => {
-        setData(generateData(startDate, endDate));
+    const handleMonthChange = () => {
+        setData(generateData(selectedMonth));
     };
 
     // Hitung total hit untuk setiap layanan
@@ -47,6 +47,22 @@ const LogStatsTab = () => {
     // Hitung total biaya gabungan (dalam Rupiah)
     const totalCost = totalIdentifyBilling + totalShareBilling + totalEasyVerifyBilling + totalSecureVerifyBilling;
 
+    function getRandomInt(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    // Dummy data untuk invoice bulanan
+    const monthlyInvoiceData = [
+        { month: 'Januari 2023', total_billing: 1000000 },
+        { month: 'Februari 2023', total_billing: 9250000 },
+        { month: 'Maret 2023', total_billing: 2300500 },
+        { month: 'April 2023', total_billing: 2101050 },
+        { month: 'Mei 2023', total_billing: 4416490 },
+    ];
+
+
     return (
         <div className="space-y-8">
             {/* Bagian Statistik Penggunaan */}
@@ -57,25 +73,16 @@ const LogStatsTab = () => {
                 <CardContent>
                     <div className="flex flex-wrap gap-4 mb-4">
                         <div className="flex-1 min-w-[200px]">
-                            <label htmlFor="start-date" className="block text-sm font-medium text-gray-700 mb-1">Tanggal Mulai</label>
+                            <label htmlFor="selected-month" className="block text-sm font-medium text-gray-700 mb-1">Pilih Bulan</label>
                             <Input
-                                id="start-date"
-                                type="date"
-                                value={startDate}
-                                onChange={(e) => setStartDate(e.target.value)}
-                            />
-                        </div>
-                        <div className="flex-1 min-w-[200px]">
-                            <label htmlFor="end-date" className="block text-sm font-medium text-gray-700 mb-1">Tanggal Akhir</label>
-                            <Input
-                                id="end-date"
-                                type="date"
-                                value={endDate}
-                                onChange={(e) => setEndDate(e.target.value)}
+                                id="selected-month"
+                                type="month"
+                                value={selectedMonth}
+                                onChange={(e) => setSelectedMonth(e.target.value)}
                             />
                         </div>
                         <div className="flex items-end">
-                            <Button onClick={handleDateChange} className="bg-blue-500 hover:bg-blue-600 text-white">
+                            <Button onClick={handleMonthChange} className="bg-blue-500 hover:bg-blue-600 text-white">
                                 <Calendar className="h-4 w-4 mr-2" />
                                 Terapkan
                             </Button>
@@ -103,6 +110,7 @@ const LogStatsTab = () => {
                                 <tr>
                                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Layanan</th>
                                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Hit</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Unique Hit</th>
                                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Billing (Rp)</th>
                                 </tr>
                             </thead>
@@ -110,25 +118,30 @@ const LogStatsTab = () => {
                                 <tr>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Identify</td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{totalIdentifyHit.toLocaleString()}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{(totalIdentifyHit - getRandomInt(1000, 9999)).toLocaleString()}</td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{totalIdentifyBilling.toLocaleString()}</td>
                                 </tr>
                                 <tr>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Share</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{totalShareHit.toLocaleString()}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{totalEasyVerifyHit.toLocaleString()}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{(totalEasyVerifyHit - getRandomInt(1000, 9999)).toLocaleString()}</td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{totalShareBilling.toLocaleString()}</td>
                                 </tr>
                                 <tr>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Easy Verify</td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{totalEasyVerifyHit.toLocaleString()}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{(totalEasyVerifyHit - getRandomInt(1000, 9999)).toLocaleString()}</td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{totalEasyVerifyBilling.toLocaleString()}</td>
                                 </tr>
                                 <tr>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Secure Verify</td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{totalSecureVerifyHit.toLocaleString()}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{(totalSecureVerifyHit - getRandomInt(1000, 9999)).toLocaleString()}</td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{totalSecureVerifyBilling.toLocaleString()}</td>
                                 </tr>
                                 <tr className="bg-gray-50">
                                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Total Biaya</td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"></td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"></td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{totalCost.toLocaleString()}</td>
                                 </tr>
@@ -137,8 +150,42 @@ const LogStatsTab = () => {
                     </div>
                 </CardContent>
             </Card>
-
-           
+            {/* Bagian Invoice Bulanan */}
+            <Card className="bg-white shadow-lg">
+                <CardHeader>
+                    <CardTitle className="text-xl font-semibold text-gray-800">Invoice</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <div className="overflow-x-auto">
+                        <table className="w-full">
+                            <thead className="bg-gray-50">
+                                <tr>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Bulan</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Billing (Rp)</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody className="bg-white divide-y divide-gray-200">
+                                {monthlyInvoiceData.map((invoice, index) => {
+                                    
+                                    return (
+                                        <tr key={index}>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{invoice.month}</td>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{invoice.total_billing.toLocaleString()}</td>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                <Button className="bg-blue-500 hover:bg-blue-600 text-white">
+                                                    <DownloadIcon className="h-4 w-4 mr-2" />
+                                                    Unduh
+                                                </Button>
+                                            </td>
+                                        </tr>
+                                    );
+                                })}
+                            </tbody>
+                        </table>
+                    </div>
+                </CardContent>
+            </Card>
 
             {/* Bagian Log Autentikasi */}
             <Card className="bg-white shadow-lg">
