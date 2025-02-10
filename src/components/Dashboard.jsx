@@ -31,7 +31,7 @@ const Dashboard = () => {
 
                     <div className="bg-white shadow-md rounded-lg overflow-hidden mb-8">
                         <div className="flex flex-wrap">
-                            {['beranda', 'konfigurasi', 'log', 'dukungan'].map((tab) => (
+                            {['beranda', 'konfigurasi', 'log', 'dukungan', 'iam'].map((tab) => (
                                 <button
                                     key={tab}
                                     className={`px-6 py-3 font-medium text-sm sm:text-base transition-colors duration-200 ${activeTab === tab
