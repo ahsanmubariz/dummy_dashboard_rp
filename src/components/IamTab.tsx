@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Users, Shield, Key, ChevronRight, Plus, Pencil, Trash2, X, ChevronDown } from 'lucide-react';
 
-type Tab = 'users' | 'roles' | 'permissions';
+const tabs = ['users', 'roles', 'permissions'];
+type Tab = typeof tabs[number];
 type User = { id: number; name: string; email: string; roles: string[] };
 type Role = { id: number; name: string; description: string; permissions: string[] };
 type Permission = { id: number; name: string; description: string; roles: string[] };
