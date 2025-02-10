@@ -8,6 +8,7 @@ import { Activity, AlertTriangle, CheckCircle, DollarSign } from 'lucide-react';
 import ConfigTab from './ConfigTab';
 import LogStatsTab from './LogStatsTab';
 import SupportTab from './SupportTab';
+import IamTab from './IamTab';
 
 const data = [
     { name: 'Sen', identify: 4000, easy_verify: 129, secure_verify:800, share:1020  },
@@ -113,6 +114,7 @@ const Dashboard = () => {
                         {activeTab === 'konfigurasi' && <ConfigTab />}
                         {activeTab === 'log' && <LogStatsTab />}
                         {activeTab === 'dukungan' && <SupportTab />}
+                        {activeTab === 'iam' && <IamTab />}
                     </div>
                 </div>
             </div>
